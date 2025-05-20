@@ -16,6 +16,11 @@ document.addEventListener("DOMContentLoaded", function () {
       "#66BB6A", // 綠色
       "#42A5F5", // 藍色
     ],
+    sounds: {
+      pop: new Audio("assets/sharp-pop.mp3"),
+      cheers: new Audio("assets/crowd-cheers.mp3"),
+      losing: new Audio("assets/losing-horn.mp3"),
+    },
   };
 
   // 遊戲狀態
@@ -247,6 +252,9 @@ document.addEventListener("DOMContentLoaded", function () {
           return;
         }
 
+        // 播放消除音效
+        playSound("pop");
+
         // 消除方塊
         removeBlocks(connectedBlocks);
 
@@ -261,8 +269,8 @@ document.addEventListener("DOMContentLoaded", function () {
         updateUI();
 
         // 方塊掉落動畫後，檢查遊戲狀態
-        setTimeout(checkGameState, 600);
-      }, 200);
+        setTimeout(checkGameState, 500);
+      }, 100);
     } else {
       logDebug(`方塊不足以消除 (需要至少2個)`);
     }
@@ -338,7 +346,7 @@ document.addEventListener("DOMContentLoaded", function () {
     setTimeout(() => {
       gameState.isAnimating = false;
       logDebug("動畫結束，重置動畫狀態");
-    }, 600);
+    }, 500);
   }
 
   // 方塊掉落邏輯
@@ -455,6 +463,9 @@ document.addEventListener("DOMContentLoaded", function () {
     setTimeout(() => {
       const progressFill = document.querySelector(".progress-fill");
       progressFill.style.width = "100%";
+
+      // 播放歡呼音效
+      playSound("cheers");
     }, 100);
 
     // 1.5秒後自動進入下一關
@@ -487,6 +498,9 @@ document.addEventListener("DOMContentLoaded", function () {
   function gameOver() {
     finalScoreElement.textContent = gameState.score;
     gameOverModal.style.display = "flex";
+
+    // 播放失敗音效
+    playSound("losing");
   }
 
   // 重試當前關卡
@@ -533,5 +547,18 @@ document.addEventListener("DOMContentLoaded", function () {
     }
     document.getElementById("blocks-left").textContent = blocksLeft;
     return blocksLeft;
+  }
+
+  // 播放音效的功能
+  function playSound(soundName) {
+    const sound = config.sounds[soundName];
+    if (sound) {
+      // 重置音頻到開始位置
+      sound.currentTime = 0;
+      // 播放音效
+      sound.play().catch((error) => {
+        console.log("音頻播放失敗:", error);
+      });
+    }
   }
 });
