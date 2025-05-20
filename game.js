@@ -9,12 +9,12 @@ document.addEventListener("DOMContentLoaded", function () {
       { colors: 6, size: 10 },
     ],
     colorPalette: [
-      "#FF6B6B", // 紅色
-      "#4ECDC4", // 藍綠色
-      "#FFD166", // 黃色
-      "#6A0572", // 紫色
-      "#32936F", // 綠色
-      "#2274A5", // 藍色
+      "#FF5252", // 紅色
+      "#4DD0E1", // 淺藍色
+      "#FFD54F", // 黃色
+      "#7C4DFF", // 紫色
+      "#66BB6A", // 綠色
+      "#42A5F5", // 藍色
     ],
   };
 
@@ -181,7 +181,9 @@ document.addEventListener("DOMContentLoaded", function () {
           block.style.backgroundColor = config.colorPalette[colorIndex];
           block.dataset.row = i;
           block.dataset.col = j;
-          block.dataset.color = colorIndex;
+
+          // 移除星星符號，改用純色塊
+          // block.dataset.color = colorIndex;
 
           // 使用閉包來保證正確的行列索引
           (function (row, col) {
@@ -209,6 +211,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // 更新方塊位置
     updateBlockPositions();
+    // 更新剩餘方塊數
+    updateBlocksLeft();
   }
 
   // 更新方塊位置
@@ -420,20 +424,11 @@ document.addEventListener("DOMContentLoaded", function () {
   function checkGameState() {
     logDebug("檢查遊戲狀態");
 
+    // 更新剩餘方塊數
+    const blocksLeft = updateBlocksLeft();
+
     // 檢查是否過關（所有方塊都被消除）
-    let allCleared = true;
-
-    for (let i = 0; i < gameState.size; i++) {
-      for (let j = 0; j < gameState.size; j++) {
-        if (gameState.board[i][j] !== -1) {
-          allCleared = false;
-          break;
-        }
-      }
-      if (!allCleared) break;
-    }
-
-    if (allCleared) {
+    if (blocksLeft === 0) {
       // 過關
       logDebug("恭喜過關！");
       levelComplete();
@@ -487,6 +482,9 @@ document.addEventListener("DOMContentLoaded", function () {
   // 重試當前關卡
   function retryCurrentLevel() {
     gameOverModal.style.display = "none";
+    // 遊戲結束後，從第一關重新開始
+    gameState.currentLevel = 0;
+    gameState.score = 0;
     initLevel();
   }
 
@@ -511,5 +509,19 @@ document.addEventListener("DOMContentLoaded", function () {
   function updateUI() {
     scoreElement.textContent = gameState.score;
     levelElement.textContent = gameState.currentLevel + 1;
+  }
+
+  // 添加計算並顯示剩餘方塊數的功能
+  function updateBlocksLeft() {
+    let blocksLeft = 0;
+    for (let i = 0; i < gameState.size; i++) {
+      for (let j = 0; j < gameState.size; j++) {
+        if (gameState.board[i][j] !== -1) {
+          blocksLeft++;
+        }
+      }
+    }
+    document.getElementById("blocks-left").textContent = blocksLeft;
+    return blocksLeft;
   }
 });

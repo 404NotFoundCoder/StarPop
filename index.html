@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>星星色塊消消樂</title>
+    <title>色塊消消樂</title>
     <link rel="stylesheet" href="style.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -14,55 +14,81 @@
   </head>
   <body>
     <div class="game-container">
-      <header>
-        <h1>星星色塊消消樂</h1>
-        <div class="info-bar">
-          <div class="score-container">
-            <p>分數: <span id="score">0</span></p>
+      <div class="game-card">
+        <div class="game-header">
+          <h1>色塊消消樂</h1>
+          <div class="level-indicator">第 <span id="level">1</span> 關</div>
+        </div>
+
+        <div class="stats-container">
+          <div class="stat-card">
+            <div class="stat-label">分數</div>
+            <div id="score" class="stat-value">0</div>
           </div>
-          <div class="level-container">
-            <p>關卡: <span id="level">1</span></p>
+          <div class="stat-card">
+            <div class="stat-label">剩餘方塊</div>
+            <div id="blocks-left" class="stat-value">36</div>
           </div>
         </div>
-      </header>
 
-      <div class="game-board-container">
-        <div id="game-board"></div>
-      </div>
+        <div class="game-board-container">
+          <div id="game-board"></div>
+        </div>
 
-      <div class="buttons">
-        <button id="restart-btn">重新開始</button>
-        <button id="help-btn">遊戲說明</button>
+        <div class="buttons">
+          <button id="restart-btn" class="primary-btn">重新開始</button>
+          <button id="help-btn" class="secondary-btn">如何遊玩</button>
+        </div>
       </div>
 
       <div id="level-complete" class="modal">
         <div class="modal-content">
           <h2>恭喜過關！</h2>
+          <div class="emoji">��</div>
           <p>您的分數: <span id="level-score">0</span></p>
-          <button id="next-level-btn">下一關</button>
+          <div class="level-badge">
+            即將進入第 <span id="next-level-num">2</span> 關
+          </div>
+          <button id="next-level-btn" class="primary-btn">下一關</button>
         </div>
       </div>
 
       <div id="game-over" class="modal">
         <div class="modal-content">
           <h2>遊戲結束</h2>
+          <div class="emoji">😢</div>
           <p>沒有可消除的方塊了</p>
           <p>最終分數: <span id="final-score">0</span></p>
-          <button id="retry-btn">重新嘗試</button>
+          <button id="retry-btn" class="primary-btn">重新開始</button>
         </div>
       </div>
 
       <div id="help-modal" class="modal">
         <div class="modal-content">
-          <h2>遊戲說明</h2>
-          <ul>
-            <li>點擊兩個或以上相連的相同顏色方塊進行消除</li>
-            <li>消除後，上方方塊會自動掉落填補空格</li>
-            <li>當垂直方向一整列被清空後，右側方塊會自動向左滑動</li>
-            <li>目標是清空整個遊戲區域中的所有方塊</li>
-            <li>消除的方塊越多，獲得的分數越高</li>
-          </ul>
-          <button id="close-help-btn">關閉</button>
+          <h2>如何遊玩</h2>
+          <div class="help-steps">
+            <div class="help-step">
+              <div class="step-number">1</div>
+              <div class="step-text">
+                點擊兩個或以上相連的相同顏色方塊進行消除
+              </div>
+            </div>
+            <div class="help-step">
+              <div class="step-number">2</div>
+              <div class="step-text">消除後，上方方塊會自動掉落填補空格</div>
+            </div>
+            <div class="help-step">
+              <div class="step-number">3</div>
+              <div class="step-text">
+                當垂直方向一整列被清空後，右側方塊會自動向左滑動
+              </div>
+            </div>
+            <div class="help-step">
+              <div class="step-number">4</div>
+              <div class="step-text">目標是清空整個遊戲區域中的所有方塊</div>
+            </div>
+          </div>
+          <button id="close-help-btn" class="primary-btn">了解</button>
         </div>
       </div>
     </div>
