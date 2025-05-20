@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>星星色塊消消樂</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="game-container">
+      <header>
+        <h1>星星色塊消消樂</h1>
+        <div class="info-bar">
+          <div class="score-container">
+            <p>分數: <span id="score">0</span></p>
+          </div>
+          <div class="level-container">
+            <p>關卡: <span id="level">1</span></p>
+          </div>
+        </div>
+      </header>
+
+      <div class="game-board-container">
+        <div id="game-board"></div>
+      </div>
+
+      <div class="buttons">
+        <button id="restart-btn">重新開始</button>
+        <button id="help-btn">遊戲說明</button>
+      </div>
+
+      <div id="level-complete" class="modal">
+        <div class="modal-content">
+          <h2>恭喜過關！</h2>
+          <p>您的分數: <span id="level-score">0</span></p>
+          <button id="next-level-btn">下一關</button>
+        </div>
+      </div>
+
+      <div id="game-over" class="modal">
+        <div class="modal-content">
+          <h2>遊戲結束</h2>
+          <p>沒有可消除的方塊了</p>
+          <p>最終分數: <span id="final-score">0</span></p>
+          <button id="retry-btn">重新嘗試</button>
+        </div>
+      </div>
+
+      <div id="help-modal" class="modal">
+        <div class="modal-content">
+          <h2>遊戲說明</h2>
+          <ul>
+            <li>點擊兩個或以上相連的相同顏色方塊進行消除</li>
+            <li>消除後，上方方塊會自動掉落填補空格</li>
+            <li>當垂直方向一整列被清空後，右側方塊會自動向左滑動</li>
+            <li>目標是清空整個遊戲區域中的所有方塊</li>
+            <li>消除的方塊越多，獲得的分數越高</li>
+          </ul>
+          <button id="close-help-btn">關閉</button>
+        </div>
+      </div>
+    </div>
+
+    <script src="game.js"></script>
+  </body>
+</html>
