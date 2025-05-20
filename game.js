@@ -72,9 +72,6 @@ document.addEventListener("DOMContentLoaded", function () {
   // 按鈕事件監聽
   document.getElementById("restart-btn").addEventListener("click", restartGame);
   document
-    .getElementById("next-level-btn")
-    .addEventListener("click", nextLevel);
-  document
     .getElementById("retry-btn")
     .addEventListener("click", retryCurrentLevel);
   document.getElementById("help-btn").addEventListener("click", showHelp);
@@ -168,31 +165,25 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // 渲染遊戲板
   function renderBoard() {
-    logDebug("渲染遊戲板");
     gameBoard.innerHTML = "";
 
     for (let i = 0; i < gameState.size; i++) {
       for (let j = 0; j < gameState.size; j++) {
         const colorIndex = gameState.board[i][j];
         if (colorIndex !== -1) {
-          // -1 表示空白格
           const block = document.createElement("div");
           block.className = "star-block";
           block.style.backgroundColor = config.colorPalette[colorIndex];
           block.dataset.row = i;
           block.dataset.col = j;
 
-          // 移除星星符號，改用純色塊
-          // block.dataset.color = colorIndex;
-
-          // 使用閉包來保證正確的行列索引
           (function (row, col) {
             block.addEventListener("click", function () {
               if (gameState.isAnimating) {
-                logDebug(`點擊被忽略 - 動畫中 [${row},${col}]`);
+                console.log(`點擊被忽略 - 動畫中 [${row},${col}]`);
                 return;
               }
-              logDebug(
+              console.log(
                 `點擊方塊 [${row},${col}], 顏色: ${gameState.board[row][col]}`
               );
               handleBlockClick(row, col);
@@ -449,22 +440,31 @@ document.addEventListener("DOMContentLoaded", function () {
   // 關卡通過
   function levelComplete() {
     levelScoreElement.textContent = gameState.score;
+
+    // 更新下一關數字
+    const nextLevelNum =
+      gameState.currentLevel < config.levels.length - 1
+        ? gameState.currentLevel + 2
+        : 1;
+    document.getElementById("next-level-num").textContent = nextLevelNum;
+
+    // 顯示關卡完成彈窗
     levelCompleteModal.style.display = "flex";
 
-    // 檢查是否還有下一關
-    if (gameState.currentLevel >= config.levels.length - 1) {
-      document.getElementById("next-level-btn").textContent = "重新開始";
-    }
+    // 啟動進度條
+    setTimeout(() => {
+      const progressFill = document.querySelector(".progress-fill");
+      progressFill.style.width = "100%";
+    }, 100);
+
+    // 1.5秒後自動進入下一關
+    setTimeout(() => {
+      autoNextLevel();
+    }, 1500);
   }
 
-  // 遊戲結束
-  function gameOver() {
-    finalScoreElement.textContent = gameState.score;
-    gameOverModal.style.display = "flex";
-  }
-
-  // 下一關
-  function nextLevel() {
+  // 自動進入下一關
+  function autoNextLevel() {
     levelCompleteModal.style.display = "none";
 
     // 檢查是否還有下一關
@@ -476,7 +476,17 @@ document.addEventListener("DOMContentLoaded", function () {
       gameState.score = 0;
     }
 
+    // 重置進度條
+    const progressFill = document.querySelector(".progress-fill");
+    progressFill.style.width = "0%";
+
     initLevel();
+  }
+
+  // 遊戲結束
+  function gameOver() {
+    finalScoreElement.textContent = gameState.score;
+    gameOverModal.style.display = "flex";
   }
 
   // 重試當前關卡
